@@ -54,7 +54,7 @@ const redirectToUrl = async (req, res) => {
         return res.status(500).json({ error: "An error occurred while redirecting the URL" });
     }
 }
-const testing = (req , res) =>{
+const testing = async (req , res) =>{
    try {
    return res.status(200).json({msg :'testing route is working'})
    } catch (error) {
