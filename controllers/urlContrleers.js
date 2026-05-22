@@ -56,7 +56,7 @@ const redirectToUrl = async (req, res) => {
 }
 const testing = (req , res) =>{
    try {
-    res.send('testing')
+   return res.status(200).json({msg :'testing route is working'})
    } catch (error) {
     res.status(500).json({msg :'error'})
    }
