@@ -54,8 +54,15 @@ const redirectToUrl = async (req, res) => {
         return res.status(500).json({ error: "An error occurred while redirecting the URL" });
     }
 }
-
+const testing = (req , res) =>{
+   try {
+    res.send('testing')
+   } catch (error) {
+    res.status(500).json({msg :'error'})
+   }
+}
 module.exports = {
     shortenUrl,
-    redirectToUrl
+    redirectToUrl , 
+    testing
 };
