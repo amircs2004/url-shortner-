@@ -53,7 +53,9 @@ const redirectToUrl = async (req, res) => {
         console.error("Redirect Error: ", error);
         return res.status(500).json({ error: "An error occurred while redirecting the URL" });
     }
-}const testing = async (req, res) => {
+}
+
+const testing = async (req, res) => {
   try {
     // 1. Define the variable first!
     const dbStatus = mongoose.connection.readyState;
