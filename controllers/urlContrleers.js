@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Url = require('../models/url');
+const {connectDB} = require('../connection/connectDB');
 
 const shortenUrl = async (req, res) => {
     try {
@@ -25,8 +26,7 @@ const shortenUrl = async (req, res) => {
         return res.status(200).json({
             success: true, 
             data: newUrl,
-            shortUrl: `http://localhost:5001/redirect/${randomId}`
-        });
+shortUrl: `https://urlshortner-sand.vercel.app/redirect/${randomId}`        });
 
     } catch (error) {
         console.error("Creation Error: ", error);
@@ -56,9 +56,20 @@ const redirectToUrl = async (req, res) => {
 }
 const testing = async (req , res) =>{
    try {
-   return res.status(200).json({msg :'testing route is working'})
-   } catch (error) {
-    res.status(500).json({msg :'error'})
+   if(mongoose.connection.readyState === 1) {
+    return res.status(200).json({msg :'connected'})    
+   } else {
+    ////the error whithin the database connection not the backend code 
+    return res.status(503).json({ 
+            success: false,
+            msg: 'Database is not connected', 
+            readyState: dbStatus 
+        });
+   }
+ 
+   } catch (error) { 
+    ///the error is whole damn server !
+    return res.status(500).json({msg :'error' , error: error.message   })
    }
 }
 module.exports = {
