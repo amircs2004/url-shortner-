@@ -13,14 +13,22 @@ app.use(express.json())
 app.use('/api' , urlRoutes)
 
 // Connect to MongoDB asynchronously without blocking the server bootup
-if (process.env.MONGO_URL) {
-  connectDB(process.env.MONGO_URL)
-    .then(() => console.log('💾 Database Connected Successfully'))
-    .catch((err) => console.error('❌ Database connection error:', err.message));
-} else {
-  console.error('❌ CRITICAL: MONGO_URL environment variable is missing!');
+const startServer = async () => {
+
+  if(process.env.NODE_ENV){
+  try{
+    await connectDB(process.env.NODE_ENV)
+    console.log(' Database Connected Successfully');  
+
+  }catch(error){
+    console.error('Error connecting to database:', error);
+  }
+}else{
+  console.error(' CRITICAL: MONGO_URL environment variable is missing!');
 }
 
+}
+startServer()
 // ONLY run app.listen locally. Vercel handles its own serverless ports.
 if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 5001;
