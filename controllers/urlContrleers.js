@@ -53,25 +53,29 @@ const redirectToUrl = async (req, res) => {
         console.error("Redirect Error: ", error);
         return res.status(500).json({ error: "An error occurred while redirecting the URL" });
     }
-}
-const testing = async (req , res) =>{
-   try {
-   if(mongoose.connection.readyState === 1) {
-    return res.status(200).json({msg :'connected'})    
-   } else {
-    ////the error whithin the database connection not the backend code 
-    return res.status(503).json({ 
-            success: false,
-            msg: 'Database is not connected', 
-            readyState: dbStatus 
-        });
-   }
- 
-   } catch (error) { 
-    ///the error is whole damn server !
-    return res.status(500).json({msg :'error' , error: error.message   })
-   }
-}
+}const testing = async (req, res) => {
+  try {
+    // 1. Define the variable first!
+    const dbStatus = mongoose.connection.readyState;
+
+    if (dbStatus === 1) {
+      return res.status(200).json({ msg: 'connected' });
+    } else {
+      // Now dbStatus is defined and won't cause an error
+      return res.status(503).json({
+        success: false,
+        msg: 'Database is not connected',
+        readyState: dbStatus
+      });
+    }
+  } catch (error) {
+    // This catches the "ReferenceError" or any other server-wide crash
+    return res.status(500).json({ 
+      msg: 'error', 
+      error: error.message 
+    });
+  }
+};
 module.exports = {
     shortenUrl,
     redirectToUrl , 
