@@ -15,7 +15,7 @@ app.use('/api' , urlRoutes)
 // Connect to MongoDB asynchronously without blocking the server bootup
 const startServer = async () => {
 
-  if(process.env.NODE_ENV){
+  if(process.env.MONGO_URL){
   try{
     await connectDB(process.env.NODE_ENV)
     console.log(' Database Connected Successfully');  
@@ -33,7 +33,7 @@ startServer()
 if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 5001;
     app.listen(PORT, () => {
-        console.log(`🚀 Server is running locally on port ${PORT}`);
+        console.log(` Server is running locally on port ${PORT}`);
     });
 }
 
