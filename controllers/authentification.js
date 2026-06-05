@@ -1,8 +1,7 @@
 const user = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const validationResult = require("express-validator");
-
+const { validationResult } = require("express-validator"); 
 const generateToken = (userId) => {
   return jwt.sign(
     {
@@ -29,20 +28,20 @@ const register = async (req, res) => {
     const useralreadyExist = await user.findOne({
       $or: [{ email }, { username }],
     });
-    if (userExists) {
+    if (useralreadyExist) {
       return res
         .status(400)
         .json({ message: "User or email already registered" });
     }
 
-    const salt = bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(10);
     const hashedPassWord = await bcrypt.hash(password, salt);
 
     //// after hashing the password we add the user intl the ddatabase
     const newUser = await user.create({
       username,
       email,
-      password: hashedPassword,
+      password: hashedPassWord,
     });
     await newUser.save();
 
