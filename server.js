@@ -9,7 +9,8 @@ const app = express()
 
 const allowedOrigins = [
   'http://localhost:3000', // For local Next.js testing
-  'https://your-frontend-deployment-url.vercel.app' // Your classmate's Next.js production URL
+  //'https://your-frontend-deployment-url.vercel.app' // Your classmate's Next.js production URL ,
+  'https://front-end-shortner.vercel.app'
 ]; 
 
 // Global Middleware
@@ -28,6 +29,7 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+app.options('*', cors());
 app.use(express.json())
 app.use(cookieParser());
 // Routes
