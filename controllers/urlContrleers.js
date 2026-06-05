@@ -50,8 +50,9 @@ const redirectToUrl = async (req, res) => {
         const urlRecord = await Url.findOne({ urlId: id });
         
         if (urlRecord) {
-            return res.redirect(urlRecord.longUrl);
-        } else {
+      return res.status(200).json({ longUrl: urlRecord.longUrl });       
+    
+    } else {
             return res.status(404).json({ error: "Link not found" });
         }
     } catch (error) {
