@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Import logic from Controller
-const { register, login, logout } = require('../controllers/authController');
+const { register, login, logout } = require('../controllers/authentification');
 
 // Import validation from Middleware
 const { registerValidation, loginValidation } = require('../middleware/authMiddleware');
