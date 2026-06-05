@@ -4,15 +4,16 @@ const connectDB = require('./connection/connectDB');
 const cors = require('cors') 
 const urlRoutes = require('./routes/url.route')
 const authRoutes = require('./routes/auth.route')
+const cookieParser = require('cookie-parser');
 const app = express()
 
 // Global Middleware
 app.use(cors()) 
 app.use(express.json())
-
+app.use(cookieParser());
 // Routes
 app.use('/api' , urlRoutes)
-app.use('/api' , authRoutes)
+app.use('/api/auth' , authRoutes)
 
 
 // Connect to MongoDB asynchronously without blocking the server bootup
