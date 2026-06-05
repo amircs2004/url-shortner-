@@ -2,6 +2,8 @@ const user = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator"); 
+
+
 const generateToken = (userId) => {
   return jwt.sign(
     {
