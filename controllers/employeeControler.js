@@ -25,13 +25,14 @@ const addNewEmployee = async (req, res) => {
   }
 };
 const editEmployee = async (req, res) => {
-  const { userId, username } = req.body;
+  const { userId, username ,  ...updateData  } = req.body;
   if (!userId || !username) {
     return res.status(400).json({ Message: "PLS PROVIDE USER DETAILS" });
   }
 
   //  const newData = req.body;
-  const { ...updateData } = req.body;
+ //// it is wrong to define req.body twice const { ...updateData } = req.body; //
+ 
   if (Object.keys(updateData).length === 0) {
     return res
       .status(400)
@@ -44,7 +45,7 @@ const editEmployee = async (req, res) => {
       changed: true,
     });
     */
-       const updatedEmployee = await user.findByIdAndUpdate(id, updateData, {
+       const updatedEmployee = await user.findByIdAndUpdate(userId, updateData, {
       new: true,
       runValidators: true, // FIX: corrected spelling
     });

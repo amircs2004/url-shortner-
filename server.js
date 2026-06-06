@@ -7,6 +7,7 @@ const connectDB = require('./connection/connectDB');
 const authRoutes = require('./routes/auth.route')
 const employeeManagement = require('./routes/emplopyee.route')
 const urlRoutes = require('./routes/url.route')
+const productRoutes = require('./routes/product.route')
 
 const allowedOrigins = [
   'http://localhost:3000', // For local Next.js testing
@@ -32,9 +33,11 @@ app.use(cors({
 }));
 app.use(express.json())
 app.use(cookieParser());
+
 // Routes
 app.use('/api' , urlRoutes)
 app.use('/api/auth' , authRoutes)
+app.use('/api/products' , productRoutes)
 //app.use('/api/stock' , stockManagement)
 app.use('/api/employee' , employeeManagement)
 //app.use('/api/prmotion' , promotionkManagement)
