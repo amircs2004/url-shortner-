@@ -25,36 +25,39 @@ const addNewEmployee = async (req, res) => {
   }
 };
 const editEmployee = async (req, res) => {
-  const { userId, username ,  ...updateData  } = req.body;
-  if (!userId || !username) {
-    return res.status(400).json({ Message: "PLS PROVIDE USER DETAILS" });
+  // 1. Only pull out userId to use for finding the document
+  const { userId, ...updateData } = req.body;
+
+  // 2. Validate that the userId exists
+  if (!userId) {
+    return res.status(400).json({ message: "PLS PROVIDE USER ID" });
   }
 
-  //  const newData = req.body;
- //// it is wrong to define req.body twice const { ...updateData } = req.body; //
- 
+  // 3. Ensure they sent at least something to update (like username, email, etc.)
   if (Object.keys(updateData).length === 0) {
     return res
       .status(400)
       .json({ message: "Please provide at least one field to update" });
   }
+
   try {
-    /*
-    const foundEmployeeAndEdited = await user.findByIdAndUpdate({
-      data: newData,
-      changed: true,
-    });
-    */
-       const updatedEmployee = await user.findByIdAndUpdate(userId, updateData, {
+    // 4. Update MongoDB with the remaining fields inside updateData
+    const updatedEmployee = await user.findByIdAndUpdate(userId, updateData, {
       new: true,
-      runValidators: true, // FIX: corrected spelling
+      runValidators: true, 
     });
-    return res.status(201).json({
-      sucess: true,
+
+    if (!updatedEmployee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    return res.status(200).json({ // Changed to 200 OK since 201 is usually for creating
+      success: true,
       data: updatedEmployee,
     });
   } catch (error) {
-    res.status(500).json({ Message: "SOMETHING WENT WRONG" });
+    console.error(error); // Always log this so you can see it in Vercel if it fails!
+    res.status(500).json({ message: "SOMETHING WENT WRONG" });
   }
 };
 
