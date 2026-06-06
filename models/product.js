@@ -50,5 +50,4 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Mongoose automatically converts 'Product' to lowercase and pluralizes it to look for the 'products' collection
 module.exports = mongoose.model("Product", productSchema);
