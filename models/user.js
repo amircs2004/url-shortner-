@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema(
   {
     userId: {
       type: Number,
-      uniqie: true,
+      unique: true,
       sparse: true,
     },
     username: {
