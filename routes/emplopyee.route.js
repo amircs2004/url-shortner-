@@ -13,7 +13,7 @@ const {
 router.post('/', addNewEmployee); 
 router.put('/:id', editEmployee);
 router.delete('/:id', deletedEmployee);
-router.post('/tasks', createTask);
+router.post('/task', createTask);
 router.get('/tasks' , getAllTasks)
 router.get('/employee-test' , employeeTest)
 
