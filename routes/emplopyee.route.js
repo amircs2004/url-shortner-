@@ -5,12 +5,16 @@ const {
   addNewEmployee,
   editEmployee,
   deletedEmployee,
-  createTask,
+  createTask, 
+  getAllTasks , 
+  employeeTest
 } = require('../controllers/employeeControler')
 
-router.post('/employees', addNewEmployee); 
-router.put('/employees/:id', editEmployee);
-router.delete('/employees/:id', deletedEmployee);
+router.post('/', addNewEmployee); 
+router.put('/:id', editEmployee);
+router.delete('/:id', deletedEmployee);
 router.post('/tasks', createTask);
+router.get('/tasks' , getAllTasks)
+router.get('/employee-test' , employeeTest)
 
 module.exports = router;

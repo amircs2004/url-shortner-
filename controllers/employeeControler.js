@@ -110,10 +110,17 @@ const createTask = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong during task creation" });
     }
 };
+const getAllTasks = async (req , res) =>{
 
+}
+const employeeTest = async (req , res)=>{
+    return res.send('employee scaling is working fine')
+}
 module.exports = {
   addNewEmployee,
   editEmployee,
   deletedEmployee,
-  createTask,
+  createTask, 
+  getAllTasks ,
+  employeeTest
 };
