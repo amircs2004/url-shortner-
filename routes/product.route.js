@@ -5,7 +5,7 @@ const {
   addNewProduct,
   editProduct,
   deletedProduct,
-} = require("../controllers/productController");
+} = require('../controllers/stockControllers')
 
 router.post("/", addNewProduct);
 
