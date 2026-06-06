@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator"); 
 
-
+////////////MAJOR MODIFICATION NEEDED HERE SINCE WERE SCALING UP
 const generateToken = (userId) => {
   return jwt.sign(
     {
@@ -24,7 +24,7 @@ const register = async (req, res) => {
       errors: errors.array(),
     });
   }
-  const { username, email, password } = req.body; //yjo min html lol
+  const { username, email, password  , role} = req.body; //yjo min html lol
 
   try {
     const useralreadyExist = await user.findOne({
@@ -44,6 +44,7 @@ const register = async (req, res) => {
       username,
       email,
       password: hashedPassWord,
+      role 
     });
     await newUser.save();
 
