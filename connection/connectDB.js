@@ -1,15 +1,35 @@
-const mongoose = require('mongoose')
+
+const mongoose = require('mongoose');
+
+// This variable will persist across multiple function calls in Vercel
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { 
+    conn: null,
+     promise: null };
+}
 
 const connectDB = async () => {
-    try {
-     await mongoose.connect(process.env.MONGO_URL , {
-        serverSelectionTimeoutMS: 5000, 
-            socketTimeoutMS: 45000,
-     })
-     console.log('Connected to MongoDB successfully');
-    }catch (error) {
-        console.error('Error connecting to MongoDB:', error); 
-    throw error;
-    }
-}
-module.exports = connectDB
+  // If connection already exists, return it immediately
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  // If no connection promise exists, create one
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false, //  CRITICAL: Stop Mongoose from hanging if not connected
+    };
+
+    cached.promise = mongoose.connect(process.env.MONGO_URL, opts).then((mongooseInstance) => {
+      return mongooseInstance;
+    });
+  }
+
+  // Await the promise and store the connection
+  cached.conn = await cached.promise;
+  return cached.conn;
+};
+
+module.exports = connectDB;

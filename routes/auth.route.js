@@ -2,6 +2,8 @@ require("../config/passport");
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const User = require("../models/user");
+
 const jwt = require("jsonwebtoken");
 const { register, login, logout } = require("../controllers/authentification");
 
@@ -47,7 +49,18 @@ const {
 
 // Routes - much cleaner now!
 router.post("/register", registerValidation, register);
-router.post("/login", loginValidation, login);
+/*router.post("/login", loginValidation, login);*/
+router.post("/login", loginValidation ,async (req, res) => {
+  try {
+    await connectDB();
+    
+   //this calls login function from the controller and returns the response
+   return await login(req, res);
+  } catch (error) {
+    res.status(500).json({ error: "Database connection failed" });
+  }
+
+});
 router.post("/logout", logout);
 
 module.exports = router;
