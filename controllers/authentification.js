@@ -70,7 +70,6 @@ const register = async (req, res) => {
     res.status(500).json({ message: "Server error during registration" });
   }
 };
-
 const login = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -80,22 +79,21 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // 1. Find user by email
-        const user = await user.findOne({ email });
-        if (!user) {
+        // 🛠️ FIX: Changed local variable to 'foundUser'. 
+        // This keeps 'user' safe to invoke your database model model cleanly.
+        const foundUser = await user.findOne({ email });
+        if (!foundUser) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        // 2. Compare hashed passwords
-        const isMatch = await bcrypt.compare(password, user.password);
+        // 🛠️ FIX: Updated payload references to use 'foundUser'
+        const isMatch = await bcrypt.compare(password, foundUser.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        // 3. Generate Token
-        const token = generateToken(user._id);
+        const token = generateToken(foundUser._id);
 
-        // 4. Send token via cookie
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
@@ -103,14 +101,14 @@ const login = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
-        res.json({
+        return res.json({
             message: 'Login successful',
-            user: { id: user._id, username: user.username, email: user.email }
+            user: { id: foundUser._id, username: foundUser.username, email: foundUser.email }
         });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error during login' });
+        return res.status(500).json({ message: 'Server error during login' });
     }
 };
 
