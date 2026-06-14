@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const mongoose = require("mongoose") 
 
 const addNewProduct = async (req, res) => {
   const { name, description, price, category, stock, barcode, imageUrl } = req.body;
@@ -30,6 +31,8 @@ const addNewProduct = async (req, res) => {
   }
 };
  const  searchProductById = async (req, res) => {
+  
+  
   const { id } = req.params 
   try {
 
@@ -46,6 +49,7 @@ const addNewProduct = async (req, res) => {
       msg : 'product found successfully'
     })
   }catch(error) {
+    logger.error(error)
     return res.status(500).json({ message: "SOMETHING WENT WRONG" });
   }
 
@@ -116,5 +120,6 @@ const deletedProduct = async (req, res) => {
 module.exports = {
   addNewProduct,
   editProduct,
-  deletedProduct
+  deletedProduct ,
+  searchProductById
 };
