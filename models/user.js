@@ -20,7 +20,10 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: function() {
+        //  The missing puzzle piece: Only require password if NOT signing up with Google!
+        return !this.googleId;
+      },
       minlength: [6, "Password must be at least 6 characters"],
     },
     role: {
@@ -28,9 +31,13 @@ const userSchema = new mongoose.Schema(
       enum: ["customer", "employee", "Manager"],
       required: [true, "dear Manager , please provide the user`s role "],
     },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true, // Crucial: prevents unique collisions when googleId is missing
+    },
   },
   { timestamps: true },
-  v
 );
 
 module.exports = mongoose.model("User", userSchema);
