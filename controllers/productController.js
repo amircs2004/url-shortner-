@@ -29,6 +29,29 @@ const addNewProduct = async (req, res) => {
     return res.status(500).json({ Message: "SOMETHING WENT WRONG DURING PRODUCT CREATION" });
   }
 };
+ const  searchProductById = async (req, res) => {
+  const { id } = req.params 
+  try {
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+      return res.status(400).json({ message: "Invalid product ID format" });
+    }
+
+    const foundProduct = await Product.findById(id) 
+    if(!foundProduct){
+      return res.status(404).json({ message: "Product not found" })
+    }
+    return res.status(200).json({
+      data : foundProduct , 
+      msg : 'product found successfully'
+    })
+  }catch(error) {
+    return res.status(500).json({ message: "SOMETHING WENT WRONG" });
+  }
+
+ }
+
+
 
 const editProduct = async (req, res) => {
   const { id } = req.params; // Grabbing ID from URL parameter (e.g., /api/products/:id)
