@@ -2,6 +2,7 @@ require("../config/passport");
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
 const { register, login, logout } = require("../controllers/authentification");
 
 //elper function matching your core authentication file token engine
@@ -10,6 +11,10 @@ const generateToken = (userId) => {
 };
 
 // Import logic from Controller
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"], session: false })
+);
 
 router.get(
   "/google/callback",
