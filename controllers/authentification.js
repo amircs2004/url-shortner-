@@ -81,7 +81,7 @@ const login = async (req, res) => {
 
     try {
         // 1. Find user by email
-        const user = await User.findOne({ email });
+        const user = await user.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
