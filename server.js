@@ -27,7 +27,7 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true, // 🔥 This matches your frontend 'credentials: include'
+  credentials: true, //include in frontend fetch: credentials: 'include'
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -37,7 +37,7 @@ app.use(cookieParser());
 // Routes
 app.use('/api' , urlRoutes)
 app.use('/api/auth' , authRoutes)
-app.use('/api/products' , productRoutes)
+app.use('/api/products' , productRoutes) 
 //app.use('/api/stock' , stockManagement)
 app.use('/api/employee' , employeeManagement)
 //app.use('/api/prmotion' , promotionkManagement)
