@@ -1,12 +1,15 @@
-const Product = require('../models/product');
-const mongoose = require("mongoose") 
+const Product = require("../models/product");
+const mongoose = require("mongoose");
 
 const addNewProduct = async (req, res) => {
-  const { name, description, price, category, stock, barcode, imageUrl } = req.body;
+  const { name, description, price, category, stock, barcode, imageUrl } =
+    req.body;
 
   // Enforcing your required schema fields
   if (!name || price === undefined || !category || stock === undefined) {
-    return res.status(400).json({ Message: "PLS PROVIDE COMPLETE PRODUCT DETAILS" });
+    return res
+      .status(400)
+      .json({ Message: "PLS PROVIDE COMPLETE PRODUCT DETAILS" });
   }
 
   try {
@@ -17,7 +20,7 @@ const addNewProduct = async (req, res) => {
       category,
       stock,
       barcode,
-      imageUrl
+      imageUrl,
     });
 
     return res.status(201).json({
@@ -27,35 +30,49 @@ const addNewProduct = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ Message: "SOMETHING WENT WRONG DURING PRODUCT CREATION" });
+    return res
+      .status(500)
+      .json({ Message: "SOMETHING WENT WRONG DURING PRODUCT CREATION" });
   }
 };
- const  searchProductById = async (req, res) => {
-  
-  
-  const { id } = req.params 
+const searchProductById = async (req, res) => {
+  const { id } = req.params;
   try {
-
-    if(!mongoose.Types.ObjectId.isValid(id)){
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid product ID format" });
     }
 
-    const foundProduct = await Product.findById(id) 
-    if(!foundProduct){
-      return res.status(404).json({ message: "Product not found" })
+    const foundProduct = await Product.findById(id);
+    if (!foundProduct) {
+      return res.status(404).json({ message: "Product not found" });
     }
     return res.status(200).json({
-      data : foundProduct , 
-      msg : 'product found successfully'
-    })
-  }catch(error) {
-    logger.error(error)
+      data: foundProduct,
+      msg: "product found successfully",
+    });
+  } catch (error) {
+    logger.error(error);
     return res.status(500).json({ message: "SOMETHING WENT WRONG" });
   }
+};
 
- }
-
-
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find({});
+    if (!products || products.length === 0) {
+      return res.status(404).json({ message: "No products found" });
+    }
+    return res.status(200).json({
+      data: products,
+      message: "Products retrieved successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "SOMETHING WENT WRONG",
+    });
+  }
+};
 
 const editProduct = async (req, res) => {
   const { id } = req.params; // Grabbing ID from URL parameter (e.g., /api/products/:id)
@@ -66,7 +83,9 @@ const editProduct = async (req, res) => {
   }
 
   if (Object.keys(updateData).length === 0) {
-    return res.status(400).json({ message: "Please provide at least one field to update" });
+    return res
+      .status(400)
+      .json({ message: "Please provide at least one field to update" });
   }
 
   try {
@@ -77,7 +96,9 @@ const editProduct = async (req, res) => {
     });
 
     if (!updatedProduct) {
-      return res.status(404).json({ success: false, message: "Product not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
     }
 
     return res.status(200).json({
@@ -86,7 +107,9 @@ const editProduct = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ Message: "SOMETHING WENT WRONG DURING UPDATE" });
+    return res
+      .status(500)
+      .json({ Message: "SOMETHING WENT WRONG DURING UPDATE" });
   }
 };
 
@@ -100,9 +123,11 @@ const deletedProduct = async (req, res) => {
 
   try {
     const targetDeletedProduct = await Product.findByIdAndDelete(id);
-    
+
     if (!targetDeletedProduct) {
-      return res.status(404).json({ success: false, message: "Product not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
     }
 
     return res.status(200).json({
@@ -112,7 +137,9 @@ const deletedProduct = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Something went wrong during deletion" });
+    return res
+      .status(500)
+      .json({ message: "Something went wrong during deletion" });
   }
 };
 
@@ -120,6 +147,7 @@ const deletedProduct = async (req, res) => {
 module.exports = {
   addNewProduct,
   editProduct,
-  deletedProduct ,
-  searchProductById
+  deletedProduct,
+  searchProductById, 
+  getAllProducts 
 };
