@@ -8,13 +8,14 @@ const authRoutes = require('./routes/auth.route')
 const employeeManagement = require('./routes/emplopyee.route')
 const urlRoutes = require('./routes/url.route')
 const productRoutes = require('./routes/product.route')
+const passport = require("passport");
 
 const allowedOrigins = [
   'http://localhost:3000', // For local Next.js testing
   //'https://your-frontend-deployment-url.vercel.app' // Your classmate's Next.js production URL ,
   'https://front-end-shortner.vercel.app'
 ]; 
-
+app.use(passport.initialize());
 // Global Middleware
 app.use(cors({
   origin: function (origin, callback) {

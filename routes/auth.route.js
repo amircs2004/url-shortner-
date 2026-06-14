@@ -1,9 +1,39 @@
+require("../config/passport");
 const express = require("express");
 const router = express.Router();
-
-// Import logic from Controller
+const passport = require("passport");
 const { register, login, logout } = require("../controllers/authentification");
 
+//elper function matching your core authentication file token engine
+const generateToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "1d" });
+};
+
+// Import logic from Controller
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login", session: false }),
+  (req, res) => {
+    // Generate access token signature for the authorized user instance
+    const token = generateToken(req.user._id);
+
+    // Bake token into HTTP-Only session client cookies
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    // Redirect user back to your client-side web application interface
+    const frontendUrl = process.env.NODE_ENV === "production" 
+      ? "https://your-frontend-domain.vercel.app" 
+      : "http://localhost:3000";
+
+    return res.redirect(`${frontendUrl}/dashboard`);
+  }
+);
 // Import validation from Middleware
 const {
   registerValidation,
