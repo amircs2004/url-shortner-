@@ -35,7 +35,7 @@ router.get(
 
     // Redirect user back to your client-side web application interface
     const frontendUrl = process.env.NODE_ENV === "production" 
-      ? "https://your-frontend-domain.vercel.app" 
+      ? "https://front-end-shortner.vercel.app/" 
       : "http://localhost:3000";
 
     return res.redirect(`${frontendUrl}/dashboard`);
