@@ -1,7 +1,7 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/user"); // Your lowercase-safe model file
-
+const connectDB = require('../connection/connectDB')
 passport.use(
   new GoogleStrategy(
     {
@@ -12,14 +12,17 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        // 1. Check if user already exists by Google ID
-        let foundUser = await User.findOne({ googleId: profile.id });
+          //1 CONNECT W THE DAMN DATABASE FIRST !!
+     
+          await connectDB();
+          // 2. Check if user already exists by Google ID
+          let foundUser = await User.findOne({ googleId: profile.id });
 
         if (foundUser) {
           return done(null, foundUser);
         }
 
-        // 2. Fallback: Check if an account exists with the same email address
+        // 3. Fallback: Check if an account exists with the same email address
         const emailAddress = profile.emails[0].value;
         foundUser = await User.findOne({ email: emailAddress });
 
@@ -30,7 +33,7 @@ passport.use(
           return done(null, foundUser);
         }
 
-        // 3. If completely new, provision a fresh profile document record
+        // 4. If completely new, provision a fresh profile document record
         const newUser = await User.create({
           username: profile.displayName.replace(/\s+/g, "").toLowerCase() + Math.floor(1000 + Math.random() * 9000),
           email: emailAddress,
